@@ -166,3 +166,6 @@ aposentadorias-venv
 
 # notebooks
 notebooks
+
+# Pycharm
+.idea

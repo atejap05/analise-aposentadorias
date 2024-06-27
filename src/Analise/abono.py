@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-class Abono():
+class Abono:
     def __init__(self, file_path):
         self.file_path = file_path
         self.abono_df = None

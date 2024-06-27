@@ -1,12 +1,21 @@
 import streamlit as st
-import plotly.express as px
 from streamlit_option_menu import option_menu
+import plotly.express as px
+from Analise.abono import Abono
 
-#### Config ####
+# Config
 st.set_page_config(page_title="Abono Permanência",
                    page_icon="🕗", layout="wide")
 
-##### State ####
+uploaded_file = st.sidebar.file_uploader("Choose a file", type="xlsx")
+
+if uploaded_file is not None:
+    abono = Abono(uploaded_file)
+    abono.load_data()
+
+    st.session_state["abono"] = abono
+
+# State
 if "abono" not in st.session_state:
     st.session_state["abono"] = None
 
@@ -32,7 +41,6 @@ def set_menu():
 
 
 def main():
-
     if abono is None:
         st.write(
             "Por favor, faça o upload do arquivo com os dados do Abono Permanência")
