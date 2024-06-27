@@ -1,3 +1,5 @@
+import os
+
 import streamlit as st
 from streamlit_option_menu import option_menu
 import plotly.express as px
@@ -6,20 +8,6 @@ from Analise.abono import Abono
 # Config
 st.set_page_config(page_title="Abono Permanência",
                    page_icon="🕗", layout="wide")
-
-uploaded_file = st.sidebar.file_uploader("Choose a file", type="xlsx")
-
-if uploaded_file is not None:
-    abono = Abono(uploaded_file)
-    abono.load_data()
-
-    st.session_state["abono"] = abono
-
-# State
-if "abono" not in st.session_state:
-    st.session_state["abono"] = None
-
-abono = st.session_state["abono"]
 
 
 def set_menu():
@@ -41,12 +29,13 @@ def set_menu():
 
 
 def main():
-    if abono is None:
-        st.write(
-            "Por favor, faça o upload do arquivo com os dados do Abono Permanência")
-        return
 
     selected_page = set_menu()
+
+    home = os.getcwd() if 'home' not in st.session_state else st.session_state['home']
+
+    abono = Abono(os.path.join(home, "src\\data\\geral.csv"))
+    abono.load_data()
 
     if selected_page == "Dashboard 01":
         st.title("Dashboard 01")
@@ -69,12 +58,6 @@ def main():
 
             fig = px.pie(serie_situacao, values=serie_situacao.values,
                          names=serie_situacao.index, title="Situação dos Servidores com Abono Permanência")
-            st.plotly_chart(fig)
-
-        with cols[2]:
-            escolaridade = abono.qtd_servidores_abono_permanencia_por_nivel_escolaridade()
-            fig = px.pie(escolaridade, values=escolaridade.values,
-                         names=escolaridade.index, title="Nível de Escolaridade dos Servidores com Abono Permanência")
             st.plotly_chart(fig)
 
     elif selected_page == "Dashboard 02":
