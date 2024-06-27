@@ -12,7 +12,7 @@ from Analise.abono import Abono
 st.set_page_config(page_title="Abono Permanência",
                    page_icon="🕗", layout="wide")
 
-
+# TODO: Separar o CSS para um arquivo externo
 st.markdown("""
     <style>
     div[data-testid="stMetric"] {
@@ -113,6 +113,7 @@ def show_dashboard_01(abono) -> None:
         label_mes_anterior = None
         label_proximo_mes = None
 
+        # TODO: Pegar o primeiro ano/mes automaticamente no modulo Analise (abono.py)
         if ano == 2017 and mes == 1:
             qtd_serv_mes_anterior = 0
             label_mes_anterior = "Sem dados"
@@ -129,6 +130,7 @@ def show_dashboard_01(abono) -> None:
                     ano, max(mes - 1, 1))
                 label_mes_anterior = f"Servidores com abono permanência em {str(max(mes - 1, 1)).zfill(2)}/{ano if mes != 1 else ano - 1}"
 
+        # TODO: Pegar o ultimo ano/mes automaticamente no modulo Analise (abono.py)
         if ano == 2024 and mes == 5:
             qtd_serv_proximo_mes = 0
             label_proximo_mes = "Sem dados"
