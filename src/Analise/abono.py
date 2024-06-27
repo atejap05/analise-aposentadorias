@@ -9,8 +9,14 @@ class Abono:
     def load_data(self):
         self.abono_df = pd.read_csv(self.file_path, sep=";", encoding='latin1')
 
-    def qtd_servidores_abono_permanencia(self):
-        return self.abono_df.shape[0]
+    def get_anos(self):
+        return self.abono_df["Ano"].unique()
+
+    def get_meses(self, ano):
+        return self.abono_df.loc[self.abono_df["Ano"] == ano, "Mes"].unique()
+
+    def qtd_servidores_abono_permanencia_por_ano_mes(self, ano: str, mes: str) -> int:
+        return self.abono_df.loc[(self.abono_df['Ano'] == ano) & (self.abono_df['Mes'] == mes)].shape[0]
 
     def qtd_servidores_abono_permanencia_por_uf_residencia(self):
         return self.abono_df.groupby("UF Residência").size()
