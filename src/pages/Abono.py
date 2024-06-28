@@ -147,16 +147,16 @@ def show_dashboard_01(abono) -> None:
                     ano, min(mes + 1, 12))
                 label_proximo_mes = f"Servidores com abono permanência em {str(min(mes + 1, 12)).zfill(2)}/{ano + 1 }"
 
-        cols = st.columns(3)
-        with cols[0]:
+        colsCardMes = st.columns(3)
+        with colsCardMes[0]:
             st.write("Mes anterior")
             st.metric(label=label_mes_anterior,
                       value=qtd_serv_mes_anterior)
-        with cols[1]:
+        with colsCardMes[1]:
             st.write("Mes atual")
             st.metric(label=f"Servidores com abono permanência em {str(mes).zfill(2)}/{ano}",
                       value=qtd_serv_mes_atual)
-        with cols[2]:
+        with colsCardMes[2]:
             st.write("Mes seguinte")
             st.metric(label=label_proximo_mes,
                       value=qtd_serv_proximo_mes)
