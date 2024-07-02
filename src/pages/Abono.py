@@ -77,6 +77,13 @@ def show_dashboard_01(abono) -> None:
                  title=f"Qtd de servidores com abono permanência por UF - {mes}/{ano}")
     st.plotly_chart(fig)
 
+    # grafico barras qtd serv por unidade
+    qtd_por_unidade = abono.qtd_servidores_abono_permanencia_por_unidade_por_ano_mes(
+        ano, mes)
+    fig = px.bar(qtd_por_unidade, x=qtd_por_unidade.index, y=qtd_por_unidade.values,
+                 title=f"Qtd de servidores com abono permanência por Unidade - {mes}/{ano}")
+    st.plotly_chart(fig)
+
 
 def main() -> None:
     """

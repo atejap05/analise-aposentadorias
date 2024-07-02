@@ -98,3 +98,29 @@ class Abono:
 
     def qtd_servidores_abono_permanencia_por_uf_residencia_por_ano_mes(self, ano: str, mes: str) -> pd.Series:
         return self.abono_df.loc[(self.abono_df['Ano'] == ano) & (self.abono_df['Mes'] == mes), "UF Residência"].value_counts()
+
+    @staticmethod
+    def rename_descricao_unidade(text):
+        text = text.upper().strip()
+        mapping = {
+            "SRRF/10RF/SUPERINTENDENCIA REG RFB 10A R": "10RF",
+            "SRRF/9RF/SUPERINTENDENCIA REG RFB 9A RF": "9RF",
+            "SRRF/8RF/SUPERINTENDENCIA REG RFB 8A RF": "8RF",
+            "SRRF/7RF/SUPERINTENDENCIA REG RFB 7A RF": "7RF",
+            "SRRF/6RF/SUPERINTENDENCIA REG RFB 6A RF": "6RF",
+            "SRRF/5RF/SUPERINTENDENCIA REG RFB 5A RF": "5RF",
+            "SRRF/4RF/SUPERINTENDENCIA REG RFB 4A RF": "4RF",
+            "SRRF/3RF/SUPERINTENDENCIA REG RFB 3A RF": "3RF",
+            "SRRF/2RF/SUPERINTENDENCIA REG RFB 2A RF": "2RF",
+            "SRRF/1RF/SUPERINTENDENCIA REG RFB 1A RF": "1RF",
+            "SEC ESP RECEITA FEDERAL DO BRASIL": "SERFB",
+            "COORDENACAO-GERAL DE GESTAO DE PESSOAS": "COGEP"
+        }
+        return mapping.get(text, text)
+
+    def qtd_servidores_abono_permanencia_por_unidade_por_ano_mes(self, ano: str, mes: str) -> pd.Series:
+        qtd_serv_por_unidade = self.abono_df.loc[(self.abono_df['Ano'] == ano) & (
+            self.abono_df['Mes'] == mes), "Denominação unidade"].value_counts()
+        qtd_serv_por_unidade.rename(
+            self.rename_descricao_unidade, inplace=True)
+        return qtd_serv_por_unidade
