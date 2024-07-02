@@ -70,8 +70,12 @@ def show_dashboard_01(abono) -> None:
 
     st.markdown("---")
 
-    # TODO: sessao para analise comparativa entre os anos
-    st.write("adicionar DateTimePicker para selecionar o intervalo de datas")
+    # graico de barras qtd por uf ano mes
+    qtd_por_uf_res = abono.qtd_servidores_abono_permanencia_por_uf_residencia_por_ano_mes(
+        ano, mes)
+    fig = px.bar(qtd_por_uf_res, x=qtd_por_uf_res.index, y=qtd_por_uf_res.values,
+                 title=f"Qtd de servidores com abono permanência por UF - {mes}/{ano}")
+    st.plotly_chart(fig)
 
 
 def main() -> None:
