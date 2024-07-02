@@ -6,26 +6,15 @@ from streamlit_option_menu import option_menu
 
 import plotly.express as px
 from Analise.abono import Abono
+from styles.styles import STYLES
 
 
 # Config
 st.set_page_config(page_title="Abono Permanência",
                    page_icon="🕗", layout="wide")
 
-# TODO: Separar o CSS para um arquivo externo
-st.markdown("""
-    <style>
-    div[data-testid="stMetric"] {
-        background-color: rgba(28, 131, 225, 0.1); /* Cor de fundo */
-        border: 1px solid rgba(28, 131, 225, 0.1); /* Borda */
-        padding: 5% 5% 5% 10%; /* Preenchimento */
-        border-radius: 5px; /* Bordas arredondadas */
-        color: rgb(30, 103, 119); /* Cor do texto */
-        overflow-wrap: break-word;
-    }
-
-    </style>
-""", unsafe_allow_html=True)
+# Custom CSS
+st.markdown(STYLES.get("METRIC_CARD"), unsafe_allow_html=True)
 
 
 def set_menu():
@@ -65,45 +54,6 @@ def show_dashboard_01(abono) -> None:
         ano), index=len(meses)-1, placeholder="Mês")
 
     if ano and mes:
-
-        # delta = 0
-        # valor_anterior = 0
-        # valor_atual = abono.qtd_servidores_abono_permanencia_por_ano_mes(
-        #     ano, mes)
-
-        # if ano != ano_anterior or mes != mes_anterior and ano_anterior and mes_anterior:
-        #     valor_anterior = abono.qtd_servidores_abono_permanencia_por_ano_mes(
-        #         ano_anterior, mes_anterior)
-        #     if valor_anterior:
-        #         delta = ((valor_atual / valor_anterior) - 1) * 100
-        #         delta = f"{round(delta, 2)}%".replace(".", ",")
-
-        # cols = st.columns(3)
-
-        # with cols[0]:
-        #     if ano_anterior and mes_anterior:
-        #         st.metric(label=f"Servidores com abono permanência em {str(mes_anterior).zfill(2)}/{ano_anterior}",
-        #                   value=valor_anterior)
-
-        # with cols[1]:
-        #     st.metric(label=f"Servidores com abono permanência em {str(mes).zfill(2)}/{ano}",
-        #               value=valor_atual, delta=delta)
-
-        # with cols[2]:
-
-        #     now = datetime.now()
-        #     ano_atual = now.year
-
-        #     ultimo_mes = abono.get_meses(ano_atual)[-1]
-
-        #     st.metric(label=f"Servidores com abono permanência em {ultimo_mes}/{ano_atual}",
-        #               value=abono.qtd_servidores_abono_permanencia_por_ano_mes(ano_atual, ultimo_mes))
-
-        # if ano != ano_anterior or mes != mes_anterior:
-        #     st.session_state['ano'] = ano
-        #     st.session_state['mes'] = mes
-
-        ###########################################################################################
 
         # TODO: Separar para outro modulo a logica para renderizacao dos cards
         # TODO: Adicionar a logica para o delta (variacao percentual mes anterior e proximo mes em relacao ao mes atual)
