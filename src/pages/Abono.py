@@ -39,7 +39,7 @@ def show_dashboard_01(abono) -> None:
     st.title("Análise anual do abono permanência")
     st.write("Selecione o ano e o mês que deseja consultar.")
 
-    col1, col2, col3, col4 = st.columns(4)
+    _, col2, col3, _ = st.columns(4)
 
     anos = abono.get_anos()
     ano = col2.selectbox(label="Ano", options=anos,
