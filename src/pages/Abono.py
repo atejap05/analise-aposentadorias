@@ -35,7 +35,7 @@ def set_menu():
     return selected_page
 
 
-def show_dashboard_01(abono) -> None:
+def show_dashboard_por_periodo(abono) -> None:
     st.title("Análise anual do abono permanência")
     st.write("Selecione o ano e o mês que deseja consultar.")
 
@@ -88,15 +88,32 @@ def show_dashboard_01(abono) -> None:
     st.plotly_chart(fig)
 
 
+def show_dashboard_por_servidor(abono) -> None:
+    # Dashboar para análise por servidor
+    # O usuario entra com o nome do servidor e o sistema retorna as informações
+    # de abono permanência
+    st.title("Análise por servidor")
+    input_cols = st.columns(3)
+
+    with input_cols[1]:
+        servidor = st.text_input("Digite o nome do servidor")
+        st.write(servidor)
+
+
+def show_dashboard_03(abono) -> None:
+    st.title("Dashboard 03")
+    st.write("Em construção")
+
+
 def main() -> None:
     """
     Função principal para execução do script
     """
 
     pages = {
-        "Por período": show_dashboard_01,
-        "Por servidor": None,
-        "Dashboard 03": None
+        "Por período": show_dashboard_por_periodo,
+        "Por servidor": show_dashboard_por_servidor,
+        "Dashboard 03": show_dashboard_03
     }
 
     selected_page = set_menu()
@@ -107,9 +124,8 @@ def main() -> None:
     abono = Abono(os.path.join(home, "src\\data\\geral.csv"))
     abono.load_data()
 
-    # Seleção dinâmica da página
-    pages.get(selected_page, None)(abono) if pages.get(
-        selected_page, None) else st.title("Página em construção")
+    if selected_page:
+        pages[selected_page](abono)
 
 
 if __name__ == "__main__":
