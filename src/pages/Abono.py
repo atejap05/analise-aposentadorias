@@ -27,7 +27,7 @@ def set_menu():
 
         selected_page = option_menu(
             menu_title=None,
-            options=["Dashboard 01", "Dashboard 02", "Dashboard 03"],
+            options=["Por período", "Por servidor", "Dashboard 03"],
             icons=["receipt-cutoff", "graph-up-arrow", "bar-chart"],
             orientation="vertical",
         )
@@ -50,6 +50,7 @@ def show_dashboard_01(abono) -> None:
         ano), index=len(meses)-1, placeholder="Mês")
 
     if ano and mes:
+        # TODO: implementar logica de delta
         data = abono.qtd_servidores_abono_permanencia_por_ano_mes(
             ano, mes)
 
@@ -77,6 +78,8 @@ def show_dashboard_01(abono) -> None:
                  title=f"Qtd de servidores com abono permanência por UF - {mes}/{ano}")
     st.plotly_chart(fig)
 
+    st.markdown("---")
+
     # grafico barras qtd serv por unidade
     qtd_por_unidade = abono.qtd_servidores_abono_permanencia_por_unidade_por_ano_mes(
         ano, mes)
@@ -91,8 +94,8 @@ def main() -> None:
     """
 
     pages = {
-        "Dashboard 01": show_dashboard_01,
-        "Dashboard 02": None,
+        "Por período": show_dashboard_01,
+        "Por servidor": None,
         "Dashboard 03": None
     }
 
