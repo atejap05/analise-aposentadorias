@@ -1,12 +1,11 @@
+from styles.styles import STYLES
+from Analise.abono import Abono
+import plotly.express as px
+from streamlit_option_menu import option_menu
+import streamlit as st
 import os
 from datetime import datetime
-
-import streamlit as st
-from streamlit_option_menu import option_menu
-
-import plotly.express as px
-from Analise.abono import Abono
-from styles.styles import STYLES
+from st_aggrid import AgGrid
 
 
 # Config
@@ -93,11 +92,29 @@ def show_dashboard_por_servidor(abono) -> None:
     # O usuario entra com o nome do servidor e o sistema retorna as informações
     # de abono permanência
     st.title("Análise por servidor")
-    input_cols = st.columns(3)
+    input_cols = st.columns(4)
 
     with input_cols[1]:
         servidor = st.text_input("Digite o nome do servidor")
-        st.write(servidor)
+
+    with input_cols[2]:
+        cpf = st.text_input("Digite o CPF do servidor")
+
+    with input_cols[3]:
+
+        buscar = st.button("Buscar")
+
+    # FIXME: corrigir logica de busca
+    # TODO: Buscar por servidor e cpf, alinhar botao buscar, limpar input ao clicar em buscar
+    # TODO: Refinar a tabela e as colunas de interesse a serem exibidas
+
+    # # TODO:  TESTE --> ALNEY - 00047938700
+    if buscar:
+        if servidor:
+
+            print(servidor, cpf)
+            data = abono.get_df_servidor(servidor, cpf)
+            AgGrid(data)
 
 
 def show_dashboard_03(abono) -> None:

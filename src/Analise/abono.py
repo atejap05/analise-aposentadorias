@@ -124,3 +124,14 @@ class Abono:
         qtd_serv_por_unidade.rename(
             self.rename_descricao_unidade, inplace=True)
         return qtd_serv_por_unidade
+
+    def get_df_servidor(self, servidor, cpf) -> pd.DataFrame:
+
+        cpf = str(cpf).replace(".", "").replace("-", "")
+        cpf = cpf[3:9]
+
+        # find all rows with the same cpf and name
+        return self.abono_df[
+            self.abono_df["Nome"].astype(str).str.contains(servidor, case=False) &
+            self.abono_df["CPF"].astype(str).str.contains(cpf, case=False)
+        ]
