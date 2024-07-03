@@ -141,7 +141,11 @@ def show_dashboard_por_servidor(abono) -> None:
         if name and cpf:
             data = abono.get_df_servidor(name, cpf)
             if not data.empty:
+                # Tabela dados gerais
                 AgGrid(data)
+
+                # Implementar Card com informações gerais do servidor, tempo em abono e total pago de abono
+                # TODO: Implementar card com informações gerais do servidor
 
                 # montatne pago abono permanencia ano a ano barras
                 montante = abono.montante_pago_abono_permanencia_por_servidor_ano_ano(
