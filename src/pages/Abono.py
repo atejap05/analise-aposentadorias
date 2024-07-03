@@ -144,6 +144,7 @@ def show_dashboard_por_servidor(abono) -> None:
                     name, cpf)
                 fig = px.bar(montante, x=montante.index, y=montante.values,
                              color=montante.index,
+                             text_auto=True,
                              title=f"Montante pago de abono permanência por ano para o servidor {name}")
                 st.plotly_chart(fig)
 
