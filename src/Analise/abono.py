@@ -96,6 +96,9 @@ class Abono:
                 }
                 }
 
+    def montante_pago_abono_permanencia(self) -> pd.Series:
+        return self.abono_df.groupby("Ano")["Valor"].sum()
+
     def qtd_servidores_abono_permanencia_por_uf_residencia_por_ano_mes(self, ano: str, mes: str) -> pd.Series:
         return self.abono_df.loc[(self.abono_df['Ano'] == ano) & (self.abono_df['Mes'] == mes), "UF Residência"].value_counts()
 
@@ -135,3 +138,8 @@ class Abono:
             self.abono_df["Nome"].astype(str).str.contains(servidor, case=False) &
             self.abono_df["CPF"].astype(str).str.contains(cpf, case=False)
         ]
+
+    def montante_pago_abono_permanencia_por_servidor_ano_ano(self, servidor, cpf) -> pd.Series:
+
+        df_servidor = self.get_df_servidor(servidor, cpf)
+        return df_servidor.groupby("Ano")["Valor"].sum()

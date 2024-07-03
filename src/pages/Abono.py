@@ -94,6 +94,14 @@ def show_dashboard_por_periodo(abono) -> None:
                  title=f"Qtd de servidores com abono permanência por Unidade - {mes}/{ano}")
     st.plotly_chart(fig)
 
+    st.markdown("---")
+
+    # montante pago total ano a ano
+    montante = abono.montante_pago_abono_permanencia()
+    fig_line = px.line(montante, x=montante.index, y=montante.values,
+                       title="Montante pago de abono permanência por ano")
+    st.plotly_chart(fig_line)
+
 
 def show_dashboard_por_servidor(abono) -> None:
     # Dashboar para análise por servidor
@@ -102,9 +110,9 @@ def show_dashboard_por_servidor(abono) -> None:
     cols_title = st.columns(3)
 
     with cols_title[1]:
-        st.title("Análise abono por servidor")
+        st.header("Abono por servidor")
         st.markdown(
-            "Informe o nome do servidor e o CPF para buscar as informações.")
+            "Informe o Nome e CPF para buscar as informações.")
 
     # TODO: Criar funções ou metodos que retornem esses espacos em branco como margins!
     st.markdown(" ")
@@ -134,9 +142,17 @@ def show_dashboard_por_servidor(abono) -> None:
             data = abono.get_df_servidor(name, cpf)
             if not data.empty:
                 AgGrid(data)
+
+                # montatne pago abono permanencia ano a ano barras
+                montante = abono.montante_pago_abono_permanencia_por_servidor_ano_ano(
+                    name, cpf)
+                fig = px.bar(montante, x=montante.index, y=montante.values,
+                             color=montante.index,
+                             title=f"Montante pago de abono permanência por ano para o servidor {name}")
+                st.plotly_chart(fig)
+
             else:
                 st.write("Nenhum registro encontrado para o servidor informado.")
-
         else:
             st.error(
                 "Informe o nome e o CPF do servidor para buscar as informações.")
