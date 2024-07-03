@@ -12,16 +12,9 @@ from st_aggrid import AgGrid
 st.set_page_config(page_title="Abono Permanência",
                    page_icon="🕗", layout="wide")
 
-
 # Custom CSS
 st.markdown(STYLES.get("METRIC_CARD"), unsafe_allow_html=True)
-st.markdown("""
-    <style>
-    div.row-widget.stButton > button:first-child {
-        margin-top: 25px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+st.markdown(STYLES.get("BUTTON_BUSCAR"), unsafe_allow_html=True)
 
 
 def set_menu():
@@ -115,7 +108,6 @@ def show_dashboard_por_servidor(abono) -> None:
             "Informe o Nome e CPF para buscar as informações.")
 
     # TODO: Criar funções ou metodos que retornem esses espacos em branco como margins!
-    st.markdown(" ")
     st.markdown(" ")
     st.markdown(" ")
 

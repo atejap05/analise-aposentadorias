@@ -12,5 +12,12 @@ STYLES = {
                         }
 
                         </style>
-                    """
+                    """,
+    "BUTTON_BUSCAR": """
+                        <style>
+                        div.row-widget.stButton > button:first-child {
+                            margin-top: 25px;
+                        }
+                        </style>
+                     """
 }
