@@ -12,8 +12,16 @@ from st_aggrid import AgGrid
 st.set_page_config(page_title="Abono Permanência",
                    page_icon="🕗", layout="wide")
 
+
 # Custom CSS
 st.markdown(STYLES.get("METRIC_CARD"), unsafe_allow_html=True)
+st.markdown("""
+    <style>
+    div.row-widget.stButton > button:first-child {
+        margin-top: 25px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
 
 def set_menu():
@@ -91,30 +99,47 @@ def show_dashboard_por_servidor(abono) -> None:
     # Dashboar para análise por servidor
     # O usuario entra com o nome do servidor e o sistema retorna as informações
     # de abono permanência
-    st.title("Análise por servidor")
-    input_cols = st.columns(4)
+    cols_title = st.columns(3)
 
+    with cols_title[1]:
+        st.title("Análise abono por servidor")
+        st.markdown(
+            "Informe o nome do servidor e o CPF para buscar as informações.")
+
+    # TODO: Criar funções ou metodos que retornem esses espacos em branco como margins!
+    st.markdown(" ")
+    st.markdown(" ")
+    st.markdown(" ")
+
+    input_cols = st.columns(4)
     with input_cols[1]:
-        servidor = st.text_input("Digite o nome do servidor")
+        name = st.text_input(
+            "Digite o nome do servidor",
+            key="input_name",
+            placeholder="Nome",
+        )
 
     with input_cols[2]:
-        cpf = st.text_input("Digite o CPF do servidor")
+        cpf = st.text_input("Digite o CPF do servidor",
+                            key="input_cpf",
+                            placeholder="CPF",
+                            disabled=True if not name else False)
 
     with input_cols[3]:
-
         buscar = st.button("Buscar")
-
-    # FIXME: corrigir logica de busca
-    # TODO: Buscar por servidor e cpf, alinhar botao buscar, limpar input ao clicar em buscar
-    # TODO: Refinar a tabela e as colunas de interesse a serem exibidas
-
     # # TODO:  TESTE --> ALNEY - 00047938700
     if buscar:
-        if servidor:
 
-            print(servidor, cpf)
-            data = abono.get_df_servidor(servidor, cpf)
-            AgGrid(data)
+        if name and cpf:
+            data = abono.get_df_servidor(name, cpf)
+            if not data.empty:
+                AgGrid(data)
+            else:
+                st.write("Nenhum registro encontrado para o servidor informado.")
+
+        else:
+            st.error(
+                "Informe o nome e o CPF do servidor para buscar as informações.")
 
 
 def show_dashboard_03(abono) -> None:
