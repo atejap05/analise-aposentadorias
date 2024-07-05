@@ -27,18 +27,14 @@ class Abono:
                                     == ano_max, "Mes"].max()
         return ano_max, mes_max
 
-    def qtd_servidores_abono_permanencia_por_ano_mes(self, ano: str, mes: str) -> dict:
+    def qtd_servidores_abono_permanencia_por_ano_mes(self, ano: int, mes: int) -> dict:
 
         # qtd servidor
         qtd_serv_mes_atual = self.abono_df.loc[(self.abono_df['Ano'] == ano) & (
-            self.abono_df['Mes'] == mes)].shape[0]
-        qtd_serv_mes_anterior = None
-        qtd_serv_proximo_mes = None
+                self.abono_df['Mes'] == mes)].shape[0]
 
         # labels
         label_mes_atual = f"Servidores com abono permanência em {str(mes).zfill(2)}/{ano}"
-        label_mes_anterior = None
-        label_proximo_mes = None
 
         primeiro_ano, primeiro_mes = self.get_primeiro_ano_mes()
         ultimo_ano, ultimo_mes = self.get_ultimo_ano_mes()
@@ -51,15 +47,17 @@ class Abono:
 
             if mes == 1:
                 qtd_serv_mes_anterior = self.abono_df.loc[(
-                    self.abono_df['Ano'] == ano - 1) & (self.abono_df['Mes'] == 12)].shape[0]
+                                                                  self.abono_df['Ano'] == ano - 1) & (
+                                                                  self.abono_df['Mes'] == 12)].shape[0]
 
                 label_mes_anterior = f"Servidores com abono permanência em 12/{ano - 1}"
 
             else:
                 qtd_serv_mes_anterior = self.abono_df.loc[(self.abono_df['Ano'] == ano) & (
-                    self.abono_df['Mes'] == mes - 1)].shape[0]
+                        self.abono_df['Mes'] == mes - 1)].shape[0]
 
-                label_mes_anterior = f"Servidores com abono permanência em {str(mes - 1).zfill(2)}/{ano if mes != 1 else ano - 1}"
+                label_mes_anterior = (f"Servidores com abono permanência em " +
+                                      "{str(mes - 1).zfill(2)}/{ano if mes != 1 else ano - 1}")
 
         if ano == ultimo_ano and mes == ultimo_mes:
             qtd_serv_proximo_mes = 0
@@ -69,38 +67,30 @@ class Abono:
 
             if mes == 12:
                 qtd_serv_proximo_mes = self.abono_df.loc[(
-                    self.abono_df['Ano'] == ano + 1) & (self.abono_df['Mes'] == 1)].shape[0]
+                                                                 self.abono_df['Ano'] == ano + 1) & (
+                                                                 self.abono_df['Mes'] == 1)].shape[0]
 
                 label_proximo_mes = f"Servidores com abono permanência em 01/{ano + 1}"
 
             else:
                 qtd_serv_proximo_mes = self.abono_df.loc[(
-                    self.abono_df['Ano'] == ano) & (self.abono_df['Mes'] == mes + 1)].shape[0]
+                                                                 self.abono_df['Ano'] == ano) & (
+                                                                 self.abono_df['Mes'] == mes + 1)].shape[0]
 
-                label_proximo_mes = f"Servidores com abono permanência em {str(mes + 1).zfill(2)}/{ano + 1 }"
+                label_proximo_mes = f"Servidores com abono permanência em {str(mes + 1).zfill(2)}/{ano + 1}"
 
-        return {"mes_anterior":
-                {
-                    "label": label_mes_anterior,
-                    "value": qtd_serv_mes_anterior
-                },
-                "mes_atual":
-                {
-                    "label": label_mes_atual,
-                    "value": qtd_serv_mes_atual
-                },
-                "mes_proximo":
-                {
-                    "label": label_proximo_mes,
-                    "value": qtd_serv_proximo_mes
-                }
+        return {
+                "mes_anterior": {"label": label_mes_anterior, "value": qtd_serv_mes_anterior},
+                "mes_atual": {"label": label_mes_atual, "value": qtd_serv_mes_atual},
+                "mes_proximo": {"label": label_proximo_mes, "value": qtd_serv_proximo_mes}
                 }
 
     def montante_pago_abono_permanencia(self) -> pd.Series:
         return self.abono_df.groupby("Ano")["Valor"].sum()
 
     def qtd_servidores_abono_permanencia_por_uf_residencia_por_ano_mes(self, ano: str, mes: str) -> pd.Series:
-        return self.abono_df.loc[(self.abono_df['Ano'] == ano) & (self.abono_df['Mes'] == mes), "UF Residência"].value_counts()
+        return self.abono_df.loc[
+            (self.abono_df['Ano'] == ano) & (self.abono_df['Mes'] == mes), "UF Residência"].value_counts()
 
     @staticmethod
     def rename_descricao_unidade(text):
@@ -123,7 +113,7 @@ class Abono:
 
     def qtd_servidores_abono_permanencia_por_unidade_por_ano_mes(self, ano: str, mes: str) -> pd.Series:
         qtd_serv_por_unidade = self.abono_df.loc[(self.abono_df['Ano'] == ano) & (
-            self.abono_df['Mes'] == mes), "Denominação unidade"].value_counts()
+                self.abono_df['Mes'] == mes), "Denominação unidade"].value_counts()
         qtd_serv_por_unidade.rename(
             self.rename_descricao_unidade, inplace=True)
         return qtd_serv_por_unidade
@@ -137,7 +127,7 @@ class Abono:
         return self.abono_df[
             self.abono_df["Nome"].astype(str).str.contains(servidor, case=False) &
             self.abono_df["CPF"].astype(str).str.contains(cpf, case=False)
-        ]
+            ]
 
     def montante_pago_abono_permanencia_por_servidor_ano_ano(self, servidor, cpf) -> pd.Series:
 

@@ -55,16 +55,16 @@ def show_dashboard_por_periodo(abono) -> None:
             ano, mes)
 
         # TODO: exportar para aqruivo de renderização das colunas
-        colsCardMes = st.columns(3)
-        with colsCardMes[0]:
+        cols_card_mes = st.columns(3)
+        with cols_card_mes[0]:
             st.write("Mes anterior")
             st.metric(label=data.get("mes_anterior").get("label"),
                       value=data.get("mes_anterior").get("value"))
-        with colsCardMes[1]:
+        with cols_card_mes[1]:
             st.write("Mes atual")
             st.metric(label=data.get("mes_atual").get("label"),
                       value=data.get("mes_atual").get("value"))
-        with colsCardMes[2]:
+        with cols_card_mes[2]:
             st.write("Mes seguinte")
             st.metric(label=data.get("mes_proximo").get("label"),
                       value=data.get("mes_proximo").get("value"))
@@ -155,7 +155,7 @@ def show_dashboard_por_servidor(abono) -> None:
                 "Informe o nome e o CPF do servidor para buscar as informações.")
 
 
-def show_dashboard_03(abono) -> None:
+def show_dashboard_03() -> None:
     st.title("Dashboard 03")
     st.write("Em construção")
 
