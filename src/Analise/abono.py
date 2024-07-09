@@ -118,20 +118,36 @@ class Abono:
             self.rename_descricao_unidade, inplace=True)
         return qtd_serv_por_unidade
 
-    def get_df_servidor(self, servidor, cpf) -> pd.DataFrame:
+    def get_servidor_info(self, servidor, cpf) -> dict:
 
         cpf = str(cpf).replace(".", "").replace("-", "")
         cpf = cpf[3:9]
 
         # find all rows with the same cpf and name
-        return self.abono_df[
+        df_servidor = self.abono_df[
             self.abono_df["Nome"].astype(str).str.contains(servidor, case=False) &
             self.abono_df["CPF"].astype(str).str.contains(cpf, case=False)
         ]
 
-    def montante_pago_abono_permanencia_por_servidor_ano_ano(self, servidor, cpf) -> pd.Series:
+        # montante pago ano ano
+        montante_pago = df_servidor.groupby("Ano")["Valor"].sum()
+        total = montante_pago.sum()
+        nome_servidor = df_servidor["Nome"].iloc[0]
+        tempo_em_abono = None
+        if df_servidor.shape[0] > 0:
+            ano_inicio = df_servidor["Ano/Mês início"].iloc[0].split("-")[0]
+            mes_inicio = df_servidor["Ano/Mês início"].iloc[0].split("-")[1]
+            ano_fim = df_servidor["Ano"].max()
+            mes_fim = df_servidor.loc[df_servidor["Ano"]
+                                      == ano_fim, "Mes"].max()
 
-        df_servidor = self.get_df_servidor(servidor, cpf)
-        # formatar o valor para pt-br (R$ 1.000,00)
+            tempo_em_abono = (ano_fim - int(ano_inicio)) * \
+                12 + (mes_fim - int(mes_inicio))
 
-        return df_servidor.groupby("Ano")["Valor"].sum()
+        return {
+            "df_servidor": df_servidor,
+            "nome": nome_servidor,
+            "tempo_em_abono": tempo_em_abono,
+            "montante_pago": montante_pago,
+            "total": total
+        }

@@ -138,22 +138,29 @@ def show_dashboard_por_servidor(abono) -> None:
     if buscar:
 
         if name and cpf:
-            data = abono.get_df_servidor(name, cpf)
-            if not data.empty:
-                # Tabela dados gerais
-                AgGrid(data)
+            data = abono.get_servidor_info(name, cpf)
+            df_servidor = data.get("df_servidor")
+            if not df_servidor.empty:
 
-                # Implementar Card com informações gerais do servidor, tempo em abono e total pago de abono
                 # TODO: Implementar card com informações gerais do servidor
+                nome_servidor = data.get("nome")
+                tempo_em_abono = data.get("tempo_em_abono")
+                total = data.get("total")
+
+                st.write(f"Nome: {nome_servidor}")
+                st.write(f"Tempo em abono: {tempo_em_abono}")
+                st.write(f"Total pago: R$ {format_brazilian(total)}")
+
+                # tabela geral de dados
+                AgGrid(df_servidor)
 
                 # montatne pago abono permanencia ano a ano barras
-                montante = abono.montante_pago_abono_permanencia_por_servidor_ano_ano(
-                    name, cpf)
+                montante_pago = data.get("montante_pago")
 
-                fig = px.bar(montante, x=montante.index, y=montante.values,
-                             color=montante.index,
+                fig = px.bar(montante_pago, x=montante_pago.index, y=montante_pago.values,
+                             color=montante_pago.index,
                              text=[f"R$ {format_brazilian(value)}"
-                                   for value in montante.values],
+                                   for value in montante_pago.values],
                              #  text_auto=True,
                              title=f"Montante pago de abono permanência por ano para o servidor {name}")
 
