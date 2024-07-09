@@ -134,6 +134,7 @@ def show_dashboard_por_servidor(abono) -> None:
 
     def format_brazilian(value):
         return f"{value:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
     if buscar:
 
         if name and cpf:
@@ -148,9 +149,7 @@ def show_dashboard_por_servidor(abono) -> None:
                 # montatne pago abono permanencia ano a ano barras
                 montante = abono.montante_pago_abono_permanencia_por_servidor_ano_ano(
                     name, cpf)
-                print(montante.values)
-                print([format_brazilian(value)
-                       for value in montante.values])
+
                 fig = px.bar(montante, x=montante.index, y=montante.values,
                              color=montante.index,
                              text=[f"R$ {format_brazilian(value)}"
