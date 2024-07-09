@@ -6,7 +6,10 @@ import streamlit as st
 import os
 from datetime import datetime
 from st_aggrid import AgGrid
+import locale
 
+# Configuração de locale
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 # Config
 st.set_page_config(page_title="Abono Permanência",
@@ -128,6 +131,9 @@ def show_dashboard_por_servidor(abono) -> None:
     with input_cols[3]:
         buscar = st.button("Buscar")
     # # TODO:  TESTE --> ALNEY - 00047938700
+
+    def format_brazilian(value):
+        return f"{value:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
     if buscar:
 
         if name and cpf:
@@ -142,10 +148,16 @@ def show_dashboard_por_servidor(abono) -> None:
                 # montatne pago abono permanencia ano a ano barras
                 montante = abono.montante_pago_abono_permanencia_por_servidor_ano_ano(
                     name, cpf)
+                print(montante.values)
+                print([format_brazilian(value)
+                       for value in montante.values])
                 fig = px.bar(montante, x=montante.index, y=montante.values,
                              color=montante.index,
-                             text_auto=True,
+                             text=[f"R$ {format_brazilian(value)}"
+                                   for value in montante.values],
+                             #  text_auto=True,
                              title=f"Montante pago de abono permanência por ano para o servidor {name}")
+
                 st.plotly_chart(fig)
 
             else:

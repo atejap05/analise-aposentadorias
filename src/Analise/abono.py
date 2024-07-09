@@ -31,7 +31,7 @@ class Abono:
 
         # qtd servidor
         qtd_serv_mes_atual = self.abono_df.loc[(self.abono_df['Ano'] == ano) & (
-                self.abono_df['Mes'] == mes)].shape[0]
+            self.abono_df['Mes'] == mes)].shape[0]
 
         # labels
         label_mes_atual = f"Servidores com abono permanência em {str(mes).zfill(2)}/{ano}"
@@ -47,14 +47,14 @@ class Abono:
 
             if mes == 1:
                 qtd_serv_mes_anterior = self.abono_df.loc[(
-                                                                  self.abono_df['Ano'] == ano - 1) & (
-                                                                  self.abono_df['Mes'] == 12)].shape[0]
+                    self.abono_df['Ano'] == ano - 1) & (
+                    self.abono_df['Mes'] == 12)].shape[0]
 
                 label_mes_anterior = f"Servidores com abono permanência em 12/{ano - 1}"
 
             else:
                 qtd_serv_mes_anterior = self.abono_df.loc[(self.abono_df['Ano'] == ano) & (
-                        self.abono_df['Mes'] == mes - 1)].shape[0]
+                    self.abono_df['Mes'] == mes - 1)].shape[0]
 
                 label_mes_anterior = (f"Servidores com abono permanência em " +
                                       "{str(mes - 1).zfill(2)}/{ano if mes != 1 else ano - 1}")
@@ -67,23 +67,23 @@ class Abono:
 
             if mes == 12:
                 qtd_serv_proximo_mes = self.abono_df.loc[(
-                                                                 self.abono_df['Ano'] == ano + 1) & (
-                                                                 self.abono_df['Mes'] == 1)].shape[0]
+                    self.abono_df['Ano'] == ano + 1) & (
+                    self.abono_df['Mes'] == 1)].shape[0]
 
                 label_proximo_mes = f"Servidores com abono permanência em 01/{ano + 1}"
 
             else:
                 qtd_serv_proximo_mes = self.abono_df.loc[(
-                                                                 self.abono_df['Ano'] == ano) & (
-                                                                 self.abono_df['Mes'] == mes + 1)].shape[0]
+                    self.abono_df['Ano'] == ano) & (
+                    self.abono_df['Mes'] == mes + 1)].shape[0]
 
                 label_proximo_mes = f"Servidores com abono permanência em {str(mes + 1).zfill(2)}/{ano + 1}"
 
         return {
-                "mes_anterior": {"label": label_mes_anterior, "value": qtd_serv_mes_anterior},
-                "mes_atual": {"label": label_mes_atual, "value": qtd_serv_mes_atual},
-                "mes_proximo": {"label": label_proximo_mes, "value": qtd_serv_proximo_mes}
-                }
+            "mes_anterior": {"label": label_mes_anterior, "value": qtd_serv_mes_anterior},
+            "mes_atual": {"label": label_mes_atual, "value": qtd_serv_mes_atual},
+            "mes_proximo": {"label": label_proximo_mes, "value": qtd_serv_proximo_mes}
+        }
 
     def montante_pago_abono_permanencia(self) -> pd.Series:
         return self.abono_df.groupby("Ano")["Valor"].sum()
@@ -113,7 +113,7 @@ class Abono:
 
     def qtd_servidores_abono_permanencia_por_unidade_por_ano_mes(self, ano: str, mes: str) -> pd.Series:
         qtd_serv_por_unidade = self.abono_df.loc[(self.abono_df['Ano'] == ano) & (
-                self.abono_df['Mes'] == mes), "Denominação unidade"].value_counts()
+            self.abono_df['Mes'] == mes), "Denominação unidade"].value_counts()
         qtd_serv_por_unidade.rename(
             self.rename_descricao_unidade, inplace=True)
         return qtd_serv_por_unidade
@@ -127,9 +127,11 @@ class Abono:
         return self.abono_df[
             self.abono_df["Nome"].astype(str).str.contains(servidor, case=False) &
             self.abono_df["CPF"].astype(str).str.contains(cpf, case=False)
-            ]
+        ]
 
     def montante_pago_abono_permanencia_por_servidor_ano_ano(self, servidor, cpf) -> pd.Series:
 
         df_servidor = self.get_df_servidor(servidor, cpf)
+        # formatar o valor para pt-br (R$ 1.000,00)
+
         return df_servidor.groupby("Ano")["Valor"].sum()
