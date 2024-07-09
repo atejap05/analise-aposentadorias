@@ -140,16 +140,29 @@ def show_dashboard_por_servidor(abono) -> None:
         if name and cpf:
             data = abono.get_servidor_info(name, cpf)
             df_servidor = data.get("df_servidor")
-            if not df_servidor.empty:
 
-                # TODO: Implementar card com informações gerais do servidor
+            if not df_servidor.empty:
                 nome_servidor = data.get("nome")
                 tempo_em_abono = data.get("tempo_em_abono")
                 total = data.get("total")
 
-                st.write(f"Nome: {nome_servidor}")
-                st.write(f"Tempo em abono: {tempo_em_abono}")
-                st.write(f"Total pago: R$ {format_brazilian(total)}")
+                # TODO: Implementar card com informações gerais do servidor
+                cols_name = st.columns(3)
+                with cols_name[1]:
+                    st.subheader(nome_servidor)
+
+                cols_info_servidor = st.columns(4)
+                with cols_info_servidor[1]:
+                    anos = tempo_em_abono // 12
+                    meses = tempo_em_abono % 12
+                    tempo_em_abono_str = f"{anos} anos e {meses} meses"
+                    st.metric(label="Tempo em abono",
+                              value=tempo_em_abono_str)
+                with cols_info_servidor[2]:
+                    st.metric(label="Total pago",
+                              value=f"R$ {format_brazilian(total)}")
+
+                st.markdown("---")
 
                 # tabela geral de dados
                 AgGrid(df_servidor)
@@ -162,7 +175,7 @@ def show_dashboard_por_servidor(abono) -> None:
                              text=[f"R$ {format_brazilian(value)}"
                                    for value in montante_pago.values],
                              #  text_auto=True,
-                             title=f"Montante pago de abono permanência por ano para o servidor {name}")
+                             title=f"Montante pago de abono permanência por ano para o servidor {nome_servidor.lower()}")
 
                 st.plotly_chart(fig)
 
